@@ -9,5 +9,6 @@ dist/
 # Tests
 test/*
 
-# Logs
-logs
+# App Data
+logs/
+files/
