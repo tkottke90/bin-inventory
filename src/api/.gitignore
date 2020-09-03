@@ -1,0 +1,13 @@
+# Git Ignore 
+
+# NPM
+node_modules/
+
+# Application
+dist/
+
+# Tests
+test/*
+
+# Logs
+logs

@@ -1,0 +1,24 @@
+{
+	"compilerOptions": {
+			"experimentalDecorators": true,
+			"module": "commonjs",
+			"esModuleInterop": true,
+			"target": "es2019",
+			"noImplicitAny": true,
+			"moduleResolution": "node",
+			"sourceMap": true,
+			"allowJs": true,
+			"outDir": "dist",
+			"baseUrl": ".",
+			"paths": {
+					"*": [ "node_modules/*" ],
+					"@interfaces/*": [ "src/interfaces/*" ],
+					"@classes/*": [ "src/classes/*" ],
+					"@services/*": [ "src/services/*" ]
+			},
+			"typeRoots": ["./node_modules/@types", "./typings"]
+	},
+	"include": [
+			"src/**/*"
+	]
+}
