@@ -110,7 +110,7 @@ export default class AuthenticationService {
 
             const result = await db.findOne({ where: { [db.primaryKeyAttribute]: userId } })
             const _user: any = await result.get({ plain: true });
-            const auth = _user.auth;
+            const auth = _user.auth || {};
             // Compare refresh token provided with the one for that user
             if (auth.refresh === context.request.cookies['session-refresh']) {
               user = _user;
