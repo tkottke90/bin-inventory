@@ -10,6 +10,8 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - 5432:5432
+    networks:
+      - db
 
   pgadmin:
     image: dpage/pgadmin4
@@ -17,6 +19,8 @@ services:
       - db
     ports:
       - "5431:80"
+    networks:
+      - db
     environment:
       PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
       PGADMIN_DEFAULT_PASSWORD: admin
@@ -24,3 +28,6 @@ services:
 
 volumes:
   postgres-data:
+
+networks:
+  db:
