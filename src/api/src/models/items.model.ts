@@ -27,6 +27,10 @@ export default class Item extends Model<Item> {
   public description: string;
 
   @AllowNull(false)
+  @Column(DataType.STRING)
+  public imageUrl: string;
+
+  @AllowNull(false)
   @Column(DataType.INTEGER)
   public quantity: number;
 
