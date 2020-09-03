@@ -9,6 +9,7 @@ import { Sequelize } from 'sequelize';
 import sequelize from '../models/index';
 
 import AuthenticationService from '../services/authentication.service';
+import BaseRoute from './base-route.class';
 
 export default class Application {
   public express: express.Application;
@@ -20,11 +21,15 @@ export default class Application {
   public authentication: AuthenticationService;
   public database: Sequelize;
 
+  public services: { [key: string]: BaseRoute }
+
   constructor() {
     this.express = express();
     this.express.use(express.json());
     this.express.use(helmet());
     this.express.use(cookieParser());
+
+    this.services = {}
 
     this.logger = logger;
     this.environment = environment;

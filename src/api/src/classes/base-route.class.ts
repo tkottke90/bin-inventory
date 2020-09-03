@@ -33,6 +33,8 @@ abstract class BaseRoute {
     this.router = Router();
     this.app = app;
     this.routeName = route.startsWith('/') ? route : `/${route}`;
+
+    app.services[route] = this;
   }
 
   public setup(options: IOptions) {
