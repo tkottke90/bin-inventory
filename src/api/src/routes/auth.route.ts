@@ -3,7 +3,7 @@ import Application from '../classes/application.class';
 
 import { IHooksArray, IContext } from '../interfaces/routing.interfaces';
 
-class UsersRoute extends BaseRoute {
+export default class UsersRoute extends BaseRoute {
 
   private beforeHooks: IHooksArray = {
     all: [],

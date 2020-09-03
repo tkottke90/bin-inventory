@@ -7,7 +7,7 @@ import { scrubPassword } from '../hooks/scrub-password.hook';
 import { uniqueEmail } from '../hooks/unique-email.hook';
 import { limitAccess } from '../hooks/limit-access.hook';
 
-class UsersRoute extends DataModelRoute {
+export default class UsersRoute extends DataModelRoute {
 
   private beforeHooks: IHooksArray = {
     all: [ this.app.authentication.jwtAuth ],

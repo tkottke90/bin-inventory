@@ -4,7 +4,7 @@ import Application from '../classes/application.class';
 import { IHooksArray } from '../interfaces/routing.interfaces';
 import { limitAccess } from '../hooks/limit-access.hook';
 
-class TransactionsRoute extends DataModelRoute {
+export default class TransactionsRoute extends DataModelRoute {
 
   private beforeHooks: IHooksArray = {
     all: [ this.app.authentication.jwtAuth ],
