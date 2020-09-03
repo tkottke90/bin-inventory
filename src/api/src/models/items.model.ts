@@ -25,8 +25,7 @@ export default class Item extends Model<Item> {
   @AllowNull(false)
   @Column(DataType.STRING)
   public description: string;
-
-  @AllowNull(false)
+  
   @Column(DataType.STRING)
   public imageUrl: string;
 
