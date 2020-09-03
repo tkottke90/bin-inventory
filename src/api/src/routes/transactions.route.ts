@@ -8,11 +8,11 @@ class TransactionsRoute extends DataModelRoute {
 
   private beforeHooks: IHooksArray = {
     all: [ this.app.authentication.jwtAuth ],
-    find: [],
-    get: [],
-    create: [ limitAccess('admin') ],
-    update: [],
-    updateOrCreate: [],
+    find: [ limitAccess('user') ],
+    get: [ limitAccess('user') ],
+    create: [ limitAccess('user') ],
+    update: [ limitAccess('admin') ],
+    updateOrCreate: [ limitAccess('admin') ],
     delete: [ limitAccess('admin') ]
   };
 
