@@ -127,6 +127,12 @@ abstract class BaseRoute {
       delete context.result._code;
       const data = context.result;
 
+      // If file is set, return file
+      if(context.file) {
+        response.sendFile(context.file);
+        return;
+      }
+
       response.status(status).json(data);
 
     });

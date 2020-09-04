@@ -21,6 +21,7 @@ export interface IContext {
   user: any;
   readonly method: string;
   data?: any;
+  file?: any;
   result?: any;
   error?: any;
 }
