@@ -58,9 +58,30 @@ export default class ItemImageRoute extends BaseRoute {
 
     this.setup({
       routes: [
+        { method: 'get' , path: '/:id', action: this.getFile, beforeHooks: [ ...this.beforeHooks.all, ...this.beforeHooks.create ]},
         { method: 'post', path: '/', action: this.uploadFile, beforeHooks: [ ...this.beforeHooks.all, ...this.beforeHooks.create ] }
       ]
     })
+  }
+
+  public getFile = (context: IContext) => {
+    return new Promise(async (resolve, reject) => {
+      // Validate file exists
+      const filePath = path.resolve(this.storageLocation, context.params.id)
+      const fileExists = await exists(filePath);
+
+      if (!fileExists) {
+        reject({
+          _code: 404,
+          message: 'File Not Found'
+        });
+      }
+
+      // Return file
+      context.file = filePath;
+
+      resolve({ file: filePath });
+    });
   }
 
   public uploadFile = (context: IContext) => {
@@ -89,13 +110,10 @@ export default class ItemImageRoute extends BaseRoute {
         return;
       }
 
-
-
       // Upload File
       const file: fileUpload.UploadedFile = Array.isArray(context.request.files) ? context.request.files[0] : context.request.files.file; 
-      const saveLocation = path.resolve(process.cwd(), 'files');
-      const filename = await this.findNextFilename(saveLocation, file.name);
-      const filePath = path.resolve(process.cwd(), 'files', filename);
+      const filename = await this.findNextFilename(this.storageLocation, file.name);
+      const filePath = path.resolve(this.storageLocation, filename);
 
       try {
         await this.saveFile(filePath, file.mv);
@@ -111,7 +129,7 @@ export default class ItemImageRoute extends BaseRoute {
         itemUpdateData.method = 'PATCH';
         itemUpdateData.params = { id: body.item }
         itemUpdateData.data = { lastChangedBy: context.user.sub, imageUrl:  filePath };
-        const result = await itemService.patch(itemUpdateData);
+        await itemService.patch(itemUpdateData);
       } catch (error) {
         context.app.logger.error(error);
         reject(error)
