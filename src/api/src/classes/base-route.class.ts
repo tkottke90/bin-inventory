@@ -133,6 +133,12 @@ abstract class BaseRoute {
         return;
       }
 
+      // If redirect, send redirect
+      if(context.result.redirect) {
+        const redirectStatus = status !== 200 ? status : 301;
+        response.redirect(redirectStatus, context.result.redirect);
+      }
+
       response.status(status).json(data);
 
     });
