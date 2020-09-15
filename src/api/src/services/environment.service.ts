@@ -103,7 +103,7 @@ class EnvironmentService {
     return value;
   }
 
-  private loadOptionalVariable(name: string): string {
+  private loadOptionalVariable(name: string, secret: boolean = false): string {
     const value: string = process.env[name];
 
     if (!value) {
@@ -111,7 +111,7 @@ class EnvironmentService {
       return '';
     }
 
-    this.drawToConsole(`  ${name}: ${value}`);
+    this.drawToConsole(`  ${name}: ${secret ? 'set' : value}`);
     return value;
   }
 
