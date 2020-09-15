@@ -114,7 +114,7 @@ export default class AuthenticationService {
             // Compare refresh token provided with the one for that user
             if (auth.refresh === context.request.cookies['session-refresh']) {
               user = _user;
-              delete user.auth;
+              delete user.auth.refresh;
               this.generateTokens(_user, context, true);
             }
           }
@@ -206,6 +206,23 @@ export default class AuthenticationService {
     db.update(user, { where: query });
 
     return { id }
+  }
+
+  public generateEmailVerificationCode(user: any, context: IContext) {
+    const db = context.app.database.model('User');
+    const query = { [db.primaryKeyAttribute]: user.id }
+    
+
+    const randomString = crypto.randomBytes(40).toString('hex');
+    const emailToken = `${user.id}_${randomString}`;
+
+    if (user.auth) {
+      user.auth = Object.assign(user.auth, { emailVerified: false, emailToken: randomString })
+    }
+
+    db.update(user, { where: query });
+
+    return emailToken;
   }
 
   private configureLocalAuth(app: Application) {
