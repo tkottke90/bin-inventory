@@ -101,12 +101,15 @@ export default class DataModelRoute extends BaseRoute {
         // Add the primary key defined in the model and the id sent in via the url
         query[this.model.primaryKeyField] = context.params.id;
 
+        const options: any = { where: query };
+        
+        if (!context.params.skipExclusions) {
+          options.attributes = { exclude: this.exclusions };
+        }        
+
         // Query the Database
         try {
-          result = await this.model.findOne({
-            where: query,
-            attributes: { exclude: this.exclusions }
-          });
+          result = await this.model.findOne(options);
         } catch (err) {
           this.app.logger.error(err, (message) => `Sequelize Error during get in GET by ID Request: ${message}`);
           reject({ _code: 500, message: 'Error in Model Get' });
