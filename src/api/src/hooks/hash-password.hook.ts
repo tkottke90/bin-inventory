@@ -5,7 +5,7 @@ const hashPassword = async (context: IContext) => {
 
     context.data.password = await context.app.authentication.hashString(context.data.password);
 
-    context.app.logger.log('info', `Password: ${context.data.password}`);
+    context.app.logger.log('debug', `Password: ${context.data.password}`);
   }
 
   return context;
