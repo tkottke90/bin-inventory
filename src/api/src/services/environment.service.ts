@@ -18,6 +18,13 @@ class EnvironmentService {
   public SALT: number;
   public TOKEN_LIFESPAN: number;
 
+  public HAS_EMAIL: boolean;
+  public EMAIL_ENABLED: boolean;
+  public EMAIL_HOST: string;
+  public EMAIL_PORT: number;
+  public EMAIL_UN: string;
+  public EMAIL_PW: string;
+
   public HIDE_ENV: string;
   // ===============================
 
@@ -64,7 +71,7 @@ class EnvironmentService {
     this.IS_DEVELOPMENT = this.ENVIRONMENT === 'development';
 
     // == Load Variables Here ==
-    this.HOSTNAME = this.loadOrDefaultVariable('DOMAIN', `http://localhost:${__dirname}`);
+    this.HOSTNAME = this.loadOrDefaultVariable('DOMAIN', `http://localhost:${this.PORT}`);
 
     this.DATABASE_NAME = this.loadVariable('DATABASE_NAME');
     this.DATABASE_USER = this.loadVariable('DATABASE_USER');
@@ -74,7 +81,15 @@ class EnvironmentService {
     this.SECRET = this.loadSecretVariable('SECRET');
     this.SALT = Number.parseInt(this.loadVariable('SALT'), 10);
     this.TOKEN_LIFESPAN = this.loadNumberVariable('TOKEN_LIFESPAN');
+    
+    this.EMAIL_ENABLED = this.loadBooleanVariable('EMAIL_ENABLED');
+    this.EMAIL_HOST = this.loadOptionalVariable('EMAIL_HOST', true);
+    this.EMAIL_PORT = this.loadNumberVariable('EMAIL_PORT');
+    this.EMAIL_UN = this.loadOptionalVariable('EMAIL_UN', true);
+    this.EMAIL_PW = this.loadOptionalVariable('EMAIL_PW', true);
     // =========================
+
+    this.HAS_EMAIL = false;
 
     this.drawToConsole('');
   }

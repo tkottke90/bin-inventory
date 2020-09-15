@@ -6,6 +6,7 @@
   "scripts": {
     "build": "npm run clean; tsc",
     "clean": "rm -rf dist/",
+    "db:migrate": "(cd src; sequelize-cli db:migrate)",
     "docker:build": "npm run lint; docker build -t api .",
     "lint": "mkdir -p lint/; tslint -c tslint.json -o \"./lint/$(date +%Y%m%d.%H%M%S).lint.log\" -p tsconfig.json --fix",
     "preinstall": "",
@@ -17,6 +18,7 @@
     "mocha:ci": "NODE_ENV=testing PORT=9999 HIDE_ENV=true mocha -r ts-node/register --exit test/**/*.test.ts > ./test/reports/initial.test.log"
   },
   "dependencies": {
+    "@types/nodemailer": "^6.4.0",
     "bcrypt": "^5.0.0",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
@@ -25,6 +27,7 @@
     "helmet": "^4.1.0",
     "http-terminator": "^2.0.3",
     "libpq": "^1.8.9",
+    "nodemailer": "^6.4.11",
     "passport": "^0.4.1",
     "passport-http": "^0.3.0",
     "passport-jwt": "^4.0.0",
