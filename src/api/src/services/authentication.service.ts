@@ -208,7 +208,7 @@ export default class AuthenticationService {
     return { id }
   }
 
-  public generateEmailVerificationCode(user: any, context: IContext) {
+  public generateEmailVerificationCode(user: any, context: IContext, prefix: 'email' | 'forgot' = 'email') {
     const db = context.app.database.model('User');
     const query = { [db.primaryKeyAttribute]: user.id }
     
@@ -216,8 +216,16 @@ export default class AuthenticationService {
     const randomString = crypto.randomBytes(40).toString('hex');
     const emailToken = `${user.id}_${randomString}`;
 
+    const expiration = new Date();
+    expiration.setMinutes(expiration.getMinutes() + 30); // Expire token after 30 minutes
+
     if (user.auth) {
-      user.auth = Object.assign(user.auth, { emailVerified: false, emailToken: randomString })
+      const tokenInformation: { [key: string]: any } = {}
+      tokenInformation[`${prefix}Verified`] = false;
+      tokenInformation[`${prefix}Token`] = randomString;
+      tokenInformation[`${prefix}TokenExp`] = expiration.valueOf();
+
+      user.auth = Object.assign(user.auth, tokenInformation)
     }
 
     db.update(user, { where: query });
