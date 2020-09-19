@@ -2,7 +2,7 @@ import nodemailer, { Transporter } from 'nodemailer';
 import Application from '../classes/application.class';
 
 class MailerClass {
-  
+
   public mailer: Transporter;
 
   constructor(app: Application) {

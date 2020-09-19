@@ -81,7 +81,7 @@ class EnvironmentService {
     this.SECRET = this.loadVariable('SECRET', true);
     this.SALT = Number.parseInt(this.loadVariable('SALT'), 10);
     this.TOKEN_LIFESPAN = this.loadNumberVariable('TOKEN_LIFESPAN');
-    
+
     this.EMAIL_ENABLED = this.loadOrDefaultVariable('EMAIL_ENABLED', false, 'boolean');
     this.EMAIL_HOST = this.loadOptionalVariable('EMAIL_HOST', 'string');
     this.EMAIL_PORT = this.loadOptionalVariable('EMAIL_PORT', 'number');
@@ -100,7 +100,7 @@ class EnvironmentService {
       case 'number': return parseFloat(process.env[name]);
       case 'boolean':
         const isBoolString = ['true', 'false'].includes(process.env[name]);
-        if (!isBoolString) return '';  
+        if (!isBoolString) return '';
         return process.env[name] === 'true';
     }
   }

@@ -111,7 +111,7 @@ export default class ItemImageRoute extends BaseRoute {
       }
 
       // Upload File
-      const file: fileUpload.UploadedFile = Array.isArray(context.request.files) ? context.request.files[0] : context.request.files.file; 
+      const file: fileUpload.UploadedFile = Array.isArray(context.request.files) ? context.request.files[0] : context.request.files.file;
       const filename = await this.findNextFilename(this.storageLocation, file.name);
       const filePath = path.resolve(this.storageLocation, filename);
 

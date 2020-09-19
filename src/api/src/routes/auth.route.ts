@@ -36,7 +36,7 @@ export default class AuthRoute extends BaseRoute {
   }
 
   private getIDToken = (context: IContext) => {
-    return new Promise(async (resolve, reject) => {      
+    return new Promise(async (resolve, reject) => {
       resolve({
         access: context.request.cookies['session-access'],
         id: await context.app.authentication.createTokenFromObject(context.user)
@@ -48,7 +48,7 @@ export default class AuthRoute extends BaseRoute {
     return new Promise(async (resolve, reject) => {
       const Users = context.app.services['/users'] as UsersRoute;
       const createResult = await Users.post(context) as User;
-      
+
       const emailToken = context.app.authentication.generateEmailVerificationCode(createResult, context);
       const domain = context.app.environment.HOSTNAME;
       const emailURL = `${domain}/auth/validate-email/${emailToken}`;
@@ -70,7 +70,7 @@ export default class AuthRoute extends BaseRoute {
       <p>Thank You</p>
   </main>
   </body>
-</html>      
+</html>
 `
 
       try {
@@ -116,10 +116,10 @@ export default class AuthRoute extends BaseRoute {
         reject({ _code: 307, redirect: '/login' });
         return;
       }
-      
+
       const [ userId, token ] = context.params.token.split('_');
 
-      // Check for matching user      
+      // Check for matching user
       const Users = context.app.services['/users'] as UsersRoute;
       let user: any;
       try {
@@ -127,7 +127,7 @@ export default class AuthRoute extends BaseRoute {
         user = await Users.getById(Object.assign(getUserContext, { params: { id: userId, skipExclusions: true }}));
       } catch (err) {
         context.app.logger.error(err);
-        reject({ _code: 500, message: 'Internal Server Error'});  
+        reject({ _code: 500, message: 'Internal Server Error'});
         return;
       }
 
@@ -187,7 +187,7 @@ export default class AuthRoute extends BaseRoute {
         user = await Users.patch(
           Object.assign(
             getUserContext,
-            { 
+            {
               params: {
                 id: userId
               },
@@ -199,7 +199,7 @@ export default class AuthRoute extends BaseRoute {
           ));
       } catch (err) {
         context.app.logger.error(err);
-        reject({ _code: 500, message: 'Internal Server Error'});  
+        reject({ _code: 500, message: 'Internal Server Error'});
         return;
       }
 
@@ -218,7 +218,7 @@ export default class AuthRoute extends BaseRoute {
         return;
       }
 
-      // Get user with matching email     
+      // Get user with matching email
       const Users = context.app.services['/users'] as UsersRoute;
       let user: any;
       try {
@@ -226,7 +226,7 @@ export default class AuthRoute extends BaseRoute {
         user = await Users.get(getUserContext);
       } catch (err) {
         context.app.logger.error(err);
-        reject({ _code: 500, message: 'Internal Server Error'});  
+        reject({ _code: 500, message: 'Internal Server Error'});
         return;
       }
 
@@ -263,7 +263,7 @@ export default class AuthRoute extends BaseRoute {
   <body style="margin: 0; width: 100vw: height: 100vh;">
   <header style="width: 100%; background-color: #9BC7D5; padding: 0.5rem; font-weight: bold;">Bin Inventory</header>
   <main style="padding: 0.5rem;">
-      <p style="font-size: 14px; font-weight: normal;">A reset password request was made to reset the account associated with this email</p>     
+      <p style="font-size: 14px; font-weight: normal;">A reset password request was made to reset the account associated with this email</p>
       <p style="font-size: 14px; font-weight: normal;">If you did, click this link to verify: <a href="${emailURL}">${emailURL}</a></p>
       <p style="font-size: 14px; font-weight: normal;">If you did not attempt to reset your password, please ignore this email.</p>
       <p>Thank You</p>

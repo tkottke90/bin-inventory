@@ -102,10 +102,10 @@ export default class DataModelRoute extends BaseRoute {
         query[this.model.primaryKeyField] = context.params.id;
 
         const options: any = { where: query };
-        
+
         if (!context.params.skipExclusions) {
           options.attributes = { exclude: this.exclusions };
-        }        
+        }
 
         // Query the Database
         try {

@@ -25,7 +25,7 @@ export default class Item extends Model<Item> {
   @AllowNull(false)
   @Column(DataType.STRING)
   public description: string;
-  
+
   @Column(DataType.STRING)
   public imageUrl: string;
 
@@ -37,12 +37,12 @@ export default class Item extends Model<Item> {
   @Column(DataType.ARRAY(DataType.STRING))
   public tags: string[];
 
-  @ForeignKey(() => Container)  
+  @ForeignKey(() => Container)
   @AllowNull(false)
   @Column(DataType.INTEGER)
   public containerId: number;
 
-  @ForeignKey(() => User)  
+  @ForeignKey(() => User)
   @AllowNull(false)
   @Column(DataType.INTEGER)
   public lastChangedBy: number;

@@ -185,14 +185,14 @@ export default class AuthenticationService {
       jti: accessTokenID,
       type: user.type
     }, this.secret, { algorithm: 'HS512', expiresIn: this.tokenLifespan });
-    
+
     this.logger.log('info', `User successfully logged in`, { user: user.email, jti: accessTokenID });
 
     context.response.cookie('session-access', access, this.cookieOptions(context.app.environment.IS_DEVELOPMENT, this.tokenLifespan));
     if (!skipRefresh) {
       const refresh = `${user.id}.${crypto.randomBytes(40).toString('hex')}`;
       context.response.cookie('session-refresh', refresh, this.cookieOptions(context.app.environment.IS_DEVELOPMENT, FIFTEEN_DAYS));
-    
+
       // Set refresh token in users auth object
       if (user.auth) {
         user.auth.refresh = refresh;
@@ -211,7 +211,7 @@ export default class AuthenticationService {
   public generateEmailVerificationCode(user: any, context: IContext, prefix: 'email' | 'forgot' = 'email') {
     const db = context.app.database.model('User');
     const query = { [db.primaryKeyAttribute]: user.id }
-    
+
 
     const randomString = crypto.randomBytes(40).toString('hex');
     const emailToken = `${user.id}_${randomString}`;

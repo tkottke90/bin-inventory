@@ -17,7 +17,7 @@ export default class Application {
 
   public logger: Logger;
   public environment: any;
-  
+
   public authentication: AuthenticationService;
   public database: Sequelize;
 
@@ -35,7 +35,7 @@ export default class Application {
     this.environment = environment;
 
     this.port = environment.PORT;
-    
+
     this.database = sequelize();
     this.authentication = new AuthenticationService(this);
   }
