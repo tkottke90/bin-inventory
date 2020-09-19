@@ -114,7 +114,7 @@ export default class AuthenticationService {
             // Compare refresh token provided with the one for that user
             if (auth.refresh === context.request.cookies['session-refresh']) {
               user = _user;
-              delete user.auth;
+              delete user.auth.refresh;
               this.generateTokens(_user, context, true);
             }
           }
@@ -185,14 +185,14 @@ export default class AuthenticationService {
       jti: accessTokenID,
       type: user.type
     }, this.secret, { algorithm: 'HS512', expiresIn: this.tokenLifespan });
-    
+
     this.logger.log('info', `User successfully logged in`, { user: user.email, jti: accessTokenID });
 
     context.response.cookie('session-access', access, this.cookieOptions(context.app.environment.IS_DEVELOPMENT, this.tokenLifespan));
     if (!skipRefresh) {
       const refresh = `${user.id}.${crypto.randomBytes(40).toString('hex')}`;
       context.response.cookie('session-refresh', refresh, this.cookieOptions(context.app.environment.IS_DEVELOPMENT, FIFTEEN_DAYS));
-    
+
       // Set refresh token in users auth object
       if (user.auth) {
         user.auth.refresh = refresh;
@@ -206,6 +206,31 @@ export default class AuthenticationService {
     db.update(user, { where: query });
 
     return { id }
+  }
+
+  public generateEmailVerificationCode(user: any, context: IContext, prefix: 'email' | 'forgot' = 'email') {
+    const db = context.app.database.model('User');
+    const query = { [db.primaryKeyAttribute]: user.id }
+
+
+    const randomString = crypto.randomBytes(40).toString('hex');
+    const emailToken = `${user.id}_${randomString}`;
+
+    const expiration = new Date();
+    expiration.setMinutes(expiration.getMinutes() + 30); // Expire token after 30 minutes
+
+    if (user.auth) {
+      const tokenInformation: { [key: string]: any } = {}
+      tokenInformation[`${prefix}Verified`] = false;
+      tokenInformation[`${prefix}Token`] = randomString;
+      tokenInformation[`${prefix}TokenExp`] = expiration.valueOf();
+
+      user.auth = Object.assign(user.auth, tokenInformation)
+    }
+
+    db.update(user, { where: query });
+
+    return emailToken;
   }
 
   private configureLocalAuth(app: Application) {

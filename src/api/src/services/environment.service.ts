@@ -18,6 +18,13 @@ class EnvironmentService {
   public SALT: number;
   public TOKEN_LIFESPAN: number;
 
+  public HAS_EMAIL: boolean;
+  public EMAIL_ENABLED: boolean;
+  public EMAIL_HOST: string;
+  public EMAIL_PORT: number;
+  public EMAIL_UN: string;
+  public EMAIL_PW: string;
+
   public HIDE_ENV: string;
   // ===============================
 
@@ -64,59 +71,68 @@ class EnvironmentService {
     this.IS_DEVELOPMENT = this.ENVIRONMENT === 'development';
 
     // == Load Variables Here ==
-    this.HOSTNAME = this.loadOrDefaultVariable('DOMAIN', `http://localhost:${__dirname}`);
+    this.HOSTNAME = this.loadOrDefaultVariable('DOMAIN', `http://localhost:${this.PORT}`);
 
     this.DATABASE_NAME = this.loadVariable('DATABASE_NAME');
     this.DATABASE_USER = this.loadVariable('DATABASE_USER');
-    this.DATABASE_PASSWORD = this.loadSecretVariable('DATABASE_PASSWORD');
+    this.DATABASE_PASSWORD = this.loadVariable('DATABASE_PASSWORD', true);
     this.DATABASE_HOST = this.loadVariable('DATABASE_HOST');
     this.DATABASE_PORT = Number.parseInt(this.loadVariable('DATABASE_PORT'), 10);
-    this.SECRET = this.loadSecretVariable('SECRET');
+    this.SECRET = this.loadVariable('SECRET', true);
     this.SALT = Number.parseInt(this.loadVariable('SALT'), 10);
     this.TOKEN_LIFESPAN = this.loadNumberVariable('TOKEN_LIFESPAN');
+
+    this.EMAIL_ENABLED = this.loadOrDefaultVariable('EMAIL_ENABLED', false, 'boolean');
+    this.EMAIL_HOST = this.loadOptionalVariable('EMAIL_HOST', 'string');
+    this.EMAIL_PORT = this.loadOptionalVariable('EMAIL_PORT', 'number');
+    this.EMAIL_UN = this.loadOptionalVariable('EMAIL_UN', 'boolean', true);
+    this.EMAIL_PW = this.loadOptionalVariable('EMAIL_PW', 'boolean', true);
     // =========================
+
+    this.HAS_EMAIL = false;
 
     this.drawToConsole('');
   }
 
-  private loadVariable(name: string): string {
-    const value: string = process.env[name];
+  private parseVariable(name: string, type: 'string' | 'boolean' | 'number' = 'string') {
+    switch (type) {
+      case 'string': return process.env[name];
+      case 'number': return parseFloat(process.env[name]);
+      case 'boolean':
+        const isBoolString = ['true', 'false'].includes(process.env[name]);
+        if (!isBoolString) return '';
+        return process.env[name] === 'true';
+    }
+  }
+
+  private loadVariable(name: string, secret: boolean = false): string {
+    const value: string = this.parseVariable(name, 'string') as string;
 
     if (!value) {
       this.drawToConsole(`  ${name}: !! ERROR !! - Required Variable not set`);
       process.exit(400);
     }
 
-    this.drawToConsole(`  ${name}: ${value}`);
+    this.drawToConsole(`  ${name}: ${secret ? 'set' : value}`);
     return value;
   }
 
-  private loadSecretVariable(name: string): string {
-    const value: string = process.env[name];
 
-    if (!value) {
-      this.drawToConsole(`  ${name}: !! ERROR !! - Required Variable not set`);
-      process.exit(400);
-    }
 
-    this.drawToConsole(`  ${name}: set`);
-    return value;
-  }
-
-  private loadOptionalVariable(name: string): string {
-    const value: string = process.env[name];
+  private loadOptionalVariable(name: string, type: 'string' | 'boolean' | 'number' = 'string', secret: boolean = false): any {
+    const value: any = this.parseVariable(name, type);
 
     if (!value) {
       this.drawToConsole(`  ${name}: [optional variable not set]`);
       return '';
     }
 
-    this.drawToConsole(`  ${name}: ${value}`);
+    this.drawToConsole(`  ${name}: ${secret ? 'set' : value}`);
     return value;
   }
 
-  private loadOrDefaultVariable(name: string, def: any): string {
-    const value: string = process.env[name];
+  private loadOrDefaultVariable(name: string, def: any, type: 'string' | 'boolean' | 'number' = 'string'): any {
+    const value: any = this.parseVariable(name, type);
 
     if (!value) {
       this.drawToConsole(`  ${name}: ${def} [not set - using default]`);
@@ -127,27 +143,16 @@ class EnvironmentService {
     return value;
   }
 
-  private loadBooleanVariable(name: string): boolean {
-    const value: boolean = process.env[name] === 'true';
 
-    if (!value) {
-      this.drawToConsole(`  ${name}: !! ERROR !! - Invalid Boolean Variable not set`);
-      process.exit(400);
-    }
-
-    this.drawToConsole(`  ${name}: ${value}`);
-    return value;
-  }
-
-  private loadNumberVariable(name: string): number {
-    const value: number = parseFloat(process.env[name]);
+  private loadNumberVariable(name: string, secret: boolean = false): number {
+    const value: number = this.parseVariable(name, 'number') as number;
 
     if (isNaN(value)) {
       this.drawToConsole(`  ${name}: !! ERROR !! - Invalid Number Variable not set: ${value}`);
       process.exit(400);
     }
 
-    this.drawToConsole(`  ${name}: ${value}`);
+    this.drawToConsole(`  ${name}: ${secret ? 'set' : value}`);
     return value;
   }
 }

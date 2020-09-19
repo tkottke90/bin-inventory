@@ -22,22 +22,22 @@ export default class Transaction extends Model<Transaction> {
   @Column(DataType.INTEGER)
   public id: number;
 
-  @ForeignKey(() => Item)  
+  @ForeignKey(() => Item)
   @AllowNull(false)
   @Column(DataType.INTEGER)
   public itemId: number;
 
-  @ForeignKey(() => Container)  
+  @ForeignKey(() => Container)
   @AllowNull(false)
   @Column(DataType.INTEGER)
   public sourceId: number;
 
-  @ForeignKey(() => Container) 
+  @ForeignKey(() => Container)
   @AllowNull(false)
   @Column(DataType.INTEGER)
   public destinationId: number;
 
-  @ForeignKey(() => User) 
+  @ForeignKey(() => User)
   @Column(DataType.STRING)
   public password: string;
 

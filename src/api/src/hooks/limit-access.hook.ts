@@ -36,7 +36,7 @@ const limitAccess = (role: 'admin' | 'user' = 'admin', onlySame: boolean = false
     if (isAdmin) {
       return context;
     }
-    
+
     if (onlySame && !isUserResource) {
       context.app.logger.log('warn', `User attempt to access another user's resource and is not an admin`, { ...errorContext });
       context.error = { _code: 403, message: 'Forbidden'};
