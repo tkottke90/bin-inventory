@@ -25,12 +25,12 @@ jobs:
         working-directory: ./src/api
 
       - name: Lint
-        uses: tkottke90/ghaction-record-step@v1.0.0-alpha.6
-        working-directory: ./src/api
+        uses: tkottke90/ghaction-record-step@v1.0.0-alpha.7
         with:
           custom-name: 'Linter Results'
           command: 'npm run lint:ci'
           custom-file-name: 'lint.report'
+          working-directory: ./src/api
 
       - name: ls
         run: ls -halt
@@ -38,17 +38,16 @@ jobs:
 
       - name: Save Lint Report
         uses: actions/upload-artifact@v2
-        working-directory: ./src/api
         with:
           name: Linter Results
-          path: ./lint.report
+          path: ./src/api/lint.report
 
       - name: Read lint.report
         id: lint
         uses: juliangruber/read-file-action@v1
         working-directory: ./src/api
         with:
-          path: ./lint.report
+          path: ./src/api/lint.report
 
       - name: comment PR
         uses: unsplash/comment-on-pr@master
