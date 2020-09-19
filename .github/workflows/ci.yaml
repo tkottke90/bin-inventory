@@ -50,6 +50,7 @@ jobs:
 
       - name: comment PR
         uses: unsplash/comment-on-pr@master
+        if: ${{ github.event == 'pull_request' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
