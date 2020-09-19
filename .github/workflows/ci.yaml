@@ -1,0 +1,59 @@
+name: Code Analysis
+
+on:
+  push:
+
+jobs:
+  build:
+    name: Code Analysis - API
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [ 12.x ]
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v1
+
+      - name: Get Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Setup Repo
+        run: npm install
+        working-directory: ./src/api
+
+      - name: Lint
+        uses: tkottke90/ghaction-record-step@v1.0.0-alpha.6
+        working-directory: ./src/api
+        with:
+          custom-name: 'Linter Results'
+          command: 'npm run lint:ci'
+          custom-file-name: 'lint.report'
+
+      - name: ls
+        run: ls -halt
+        working-directory: ./src/api
+
+      - name: Save Lint Report
+        uses: actions/upload-artifact@v2
+        working-directory: ./src/api
+        with:
+          name: Linter Results
+          path: ./lint.report
+
+      - name: Read lint.report
+        id: lint
+        uses: juliangruber/read-file-action@v1
+        working-directory: ./src/api
+        with:
+          path: ./lint.report
+
+      - name: comment PR
+        uses: unsplash/comment-on-pr@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          msg: "${{ steps.lint.outputs.content }}"
+          check_for_duplicate_msg: false
