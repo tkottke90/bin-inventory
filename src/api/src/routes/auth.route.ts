@@ -38,6 +38,7 @@ export default class AuthRoute extends BaseRoute {
   private getIDToken = (context: IContext) => {
     return new Promise(async (resolve, reject) => {      
       resolve({
+        access: context.request.cookies['session-access'],
         id: await context.app.authentication.createTokenFromObject(context.user)
       });
     });
