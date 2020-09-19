@@ -9,7 +9,7 @@
     "db:migrate": "(cd src; sequelize-cli db:migrate)",
     "docker:build": "npm run lint; docker build -t api .",
     "lint": "mkdir -p lint/; tslint -c tslint.json -o \"./lint/$(date +%Y%m%d.%H%M%S).lint.log\" -p tsconfig.json --fix",
-    "lint:ci": "mkdir -p lint/; tslint -c tslint.json -o \"./lint/$(date +%Y%m%d.%H%M%S).lint.log\" -p tsconfig.json",
+    "lint:ci": "mkdir -p lint/; tslint -c tslint.json -p tsconfig.json",
     "preinstall": "",
     "release": "standard-version -r",
     "release-rc": "standard-version -p",
