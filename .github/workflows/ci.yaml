@@ -45,7 +45,6 @@ jobs:
       - name: Read lint.report
         id: lint
         uses: juliangruber/read-file-action@v1
-        working-directory: ./src/api
         with:
           path: ./src/api/lint.report
 
