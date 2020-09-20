@@ -1,0 +1,75 @@
+:root {
+  --mobileMedia: 600px;
+
+  --default-bezier: cubic-bezier(0.4, 0.0, 0.2, 1);
+  --decelerate-bezier: cubic-bezier(0.0, 0.0, 0.2, 1);
+  --accelerate-bezier: cubic-bezier(0.4, 0.0, 1, 1);
+
+  --elevation-1: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+  --elevation-2: 0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);
+  --elevation-3: 0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);
+  --elevation-4: 0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12);
+}
+
+body,
+body[theme='light'] {
+  --theme-primary: #758e9b;
+  --theme-accent: #558b2f;
+  --theme-warn: #fb8c00;
+  --theme-on-primary: #fff;
+  --theme-on-accent: #222;
+  --theme-on-warn: #222;
+  --foreground: #222;
+  --background: #ececec;
+
+  --svg-foreground: #000;
+}
+
+
+body[theme='dark'] {
+  --theme-primary: #617884;
+  --theme-accent: #447823;
+  --theme-warn: #f85c00;
+  --theme-on-primary: #FFF;
+  --theme-on-accent: #FFF;
+  --theme-on-warn: #fff;
+  --foreground: #E0E0E0;
+  --background: #263238;
+
+  --svg-foreground: #E0E0E0;
+}
+
+body {
+  background-color: var(--background);
+}
+
+* {
+  margin: 0;
+  box-sizing: border-box;
+}
+
+
+
+body {
+  width: 100vw;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  font-size: 16px;
+  font-family: Roboto, sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+*[hidden] {
+  display: none;
+  pointer-events: none;
+}
+
+*[text-ellipsis] {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

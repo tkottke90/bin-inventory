@@ -1,0 +1,67 @@
+import nodeResolve from 'rollup-plugin-node-resolve';
+import typescript2 from 'rollup-plugin-typescript2';
+import postcss from 'rollup-plugin-postcss';
+import { terser } from 'rollup-plugin-terser';
+import image from '@rollup/plugin-image';
+import copy from 'rollup-plugin-copy';
+import replace from '@rollup/plugin-replace';
+import workbox from 'rollup-plugin-workbox-inject';
+
+import inject from './build-util/inject';
+
+const main = {
+  input: ['src/bootstrap.ts'],
+  output: {
+    format: 'esm',
+    dir: 'dist/assets',
+    entryFileNames: 'bootstrap-[hash].js',
+    sourcemap: true
+  },
+  plugins: [
+    copy({
+      targets: [
+        { src: 'src/app/index.html', dest: 'dist/' },
+        { src: 'src/app/404.html', dest: 'dist/' },
+        { src: 'src/app/index.css', dest: 'dist/' },
+        { src: 'src/app/favicon.ico', dest: 'dist/' }
+      ]
+    }),
+    nodeResolve(),
+    typescript2(),
+    postcss({
+      writeDefinitions: true
+    }),
+    terser({ ecma: 8 }),
+    image(),
+    inject(),
+  ]
+}
+
+const service_worker = {
+  input: 'src/app/util/service-worker.js',
+  output: {
+    dir: 'dist/',
+    format: 'esm',
+    sourcemap: false
+  },
+  plugins: [
+    replace({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
+    }),
+    nodeResolve({
+      browser: true,
+    }),
+    workbox({
+      globDirectory: 'dist/',
+      globPatterns: [
+        '**/*.js',
+        'index.css',
+        'index.html',
+        'favicon.ico'
+      ],
+    }),
+    terser(),
+  ]
+}
+
+export default [ main, service_worker ];
