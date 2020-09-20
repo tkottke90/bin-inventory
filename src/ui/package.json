@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rollup -c -m",
     "watch": "rollup -w -c -m",
-    "start:dev": "NODE_ENV=development node server/index.js",
+    "start:dev": "nodemon --config server/nodemon.json server/index.js",
     "release": "standard-version -r --release-as minor",
     "release-rc": "standard-version --release-as minor -p"
   },
@@ -39,6 +39,7 @@
     "jsdom": "^16.4.0",
     "nodemon": "^2.0.4",
     "rollup": "^2.27.1",
+    "rollup-plugin-copy": "^3.3.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-postcss": "^3.1.8",
     "rollup-plugin-terser": "^7.0.2",

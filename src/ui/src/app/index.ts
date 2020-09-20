@@ -76,7 +76,7 @@ class AppComponent extends BaseComponent {
   }
 }
 
-export default function init() => {
+export default function init() {
   customElements.define('app-root', AppComponent);
   render(html`<app-root></app-root>`, document.body);
 }

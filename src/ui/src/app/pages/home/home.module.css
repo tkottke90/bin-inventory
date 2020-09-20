@@ -1,3 +1,6 @@
 .header {
-  color: var(--theme-primary);
+  color: var(--theme-on-primary);
+  background-color: var(--theme-primary);
+
+  padding: 0.5rem;
 }

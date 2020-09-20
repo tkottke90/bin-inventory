@@ -23,7 +23,8 @@ const main = {
         { src: 'src/app/index.html', dest: 'dist/' },
         { src: 'src/app/404.html', dest: 'dist/' },
         { src: 'src/app/index.css', dest: 'dist/' },
-        { src: 'src/app/favicon.ico', dest: 'dist/' }
+        { src: 'src/app/favicon.ico', dest: 'dist/' },
+        { src: 'src/app/util/manifest.webmanifest', dest: 'dist/' }
       ]
     }),
     nodeResolve(),
