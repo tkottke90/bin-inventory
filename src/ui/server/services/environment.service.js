@@ -1,10 +1,12 @@
-require('dotenv').config();
+const dotenv = require('dotenv');
 
 class Environment {
 
   constructor() { this.loadEnvironment(); }
 
   loadEnvironment() {
+    dotenv.config();
+
     console.log('=== Environment Variables ===\n');
     // Global
     this.NODE_ENV = this.loadVariable('NODE_ENV');

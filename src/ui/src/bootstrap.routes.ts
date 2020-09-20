@@ -1,14 +1,14 @@
 import { Route } from './app/util/route';
 
 const routes: Route[] = [
-  // new Route({
-  //   icon: 'home',
-  //   label: 'Home',
-  //   path: '/',
-  //   promise: () => import('./app/pages/home/home-component'),
-  //   render: true,
-  //   tag: 'home-component'
-  // })
+  new Route({
+    icon: 'home',
+    label: 'Home',
+    path: '/',
+    promise: () => import('./app/pages/home/home'),
+    render: true,
+    tag: 'home-page'
+  })
 ];
 
 const getRoutes = (pages: Route[]): Route[] => {

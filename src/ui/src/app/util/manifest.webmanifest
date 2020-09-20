@@ -2,13 +2,7 @@
   "short_name": "BIN",
   "name": "Bin Inventory Manager",
   "description": "Inventory Management Tool",
-  "icons": [
-    {
-      "src": "/images/logo.340x340.png",
-      "type": "image/png",
-      "sizes": "750x750"
-    }
-  ],
+  "orientation": "portrait",
   "start_url": "/",
   "display": "minimal-ui",
   "theme_color": "#03364c"
