@@ -14,6 +14,8 @@ class Environment {
     this.PORT = this.loadVariable('PORT');
     this.DIST_DIR = this.loadVariable('DIST_DIR');
 
+    this.SERVER_URL = this.loadVariable('SERVER_URL')
+
     if (this.NODE_ENV === 'development') {
       this.loadDevelopmentEnvironment();
     } else {
