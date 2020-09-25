@@ -3,6 +3,11 @@ const { createLogger, format, transports } = require('winston');
 
 const env = require('./environment.service');
 
+// Configurable list of levels
+const customList = [ 'fatal', 'error', 'warn', 'customer', 'info', 'http', 'verbose', 'debug', 'silly' ];
+// Convert the list to an object for winston.  See the level configuration in the documentation https://github.com/winstonjs/winston#logging-levels.
+const customLogLevels = customList.reduce( (acc, cur, index) => Object.assign(acc, { [cur]: index }), {});
+
 class Logger {
   MEGABYTE = 1000000;
   logger;
@@ -10,6 +15,7 @@ class Logger {
   constructor() {
     this.logger = createLogger({
       level: 'info',
+      levels: customLogLevels,
       format: format.combine(
         format.timestamp(),
         format.simple(),
@@ -32,7 +38,7 @@ class Logger {
   }
 
   log(level, message, data = '') {
-    const allowedLevels = ['debug' , 'info' , 'verbose' , 'http' , 'warn' , 'error']
+    const allowedLevels = customList;
     let _inputLevel = level;
     if (!allowedLevels.includes(level)){
       _inputLevel = 'debug';
