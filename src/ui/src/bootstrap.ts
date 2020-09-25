@@ -2,6 +2,8 @@ import init from './app/index';
 import { Router } from './app/router';
 import { routes } from './bootstrap.routes';
 
+import { AuthenticationService } from './app/services/authentication.service';
+
 (async () => {
   if ('serviceWorker' in navigator) {
     let refreshing = false;
@@ -18,6 +20,7 @@ import { routes } from './bootstrap.routes';
 
   const preInitializeFunctions = Promise.all([
     // Add functions that happen before 1st render here
+    AuthenticationService.init()
   ]);
   
   preInitializeFunctions.finally(() => {
