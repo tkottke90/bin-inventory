@@ -51,16 +51,16 @@ export default class AuthenticationService {
 
   public basicAuth = (context: IContext) => {
     return new Promise((resolve, reject) => {
-      passport.authenticate('basic', async (error, user, message) => {
+      passport.authenticate('basic', { failWithError: true }, async (error, user, message) => {
         if (error) {
           this.logger.log('error', 'Error authenticating basically', { error });
-          reject({ code: 500, message });
+          reject({ _code: 500, message });
           return;
         }
 
         if (!user) {
           this.logger.log('warn', 'Failed Login Attempt');
-          reject({ code: 401, message });
+          reject({ _code: 401, message });
           return;
         }
 
@@ -71,16 +71,16 @@ export default class AuthenticationService {
 
   public localAuth = (context: IContext) => {
     return new Promise((resolve, reject) => {
-      passport.authenticate('local', async (error, user, message) => {
+      passport.authenticate('local', { failWithError: true }, async (error, user, message) => {
         if (error) {
           this.logger.log('error', 'Error authenticating basically', { error });
-          reject({ code: 500, message });
+          reject({ _code: 500, message });
           return;
         }
 
         if (!user) {
           this.logger.log('warn', 'Failed Login Attempt');
-          reject({ code: 401, message });
+          reject({ _code: 401, message });
           return;
         }
 
