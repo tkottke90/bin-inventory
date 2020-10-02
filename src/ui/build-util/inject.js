@@ -33,7 +33,7 @@ export default (opts = {}) => {
           const index = fs.readFileSync(indexPath, 'utf8');
           const { document } = new JSDOM(index).window;
           const bootstrap = document.querySelector('script[src="assets/index.js"]');
-          bootstrap.src = `./assets/${map['src/bootstrap.ts']}`
+          bootstrap.src = `/assets/${map['src/bootstrap.ts']}`
           // todo, this alllllll needs to be abstracted
           // this is MVP logic for the moment
           // future facing goal would be to dictate location of the script and types.
