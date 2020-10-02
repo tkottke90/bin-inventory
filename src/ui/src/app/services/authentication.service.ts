@@ -2,6 +2,7 @@ import { BehaviorSubject } from 'rxjs';
 import { HTTPService } from './http.service';
 import { AnalyticsService } from './analytics.service';
 import { UserService } from './user.service';
+import { Router } from '../router';
 
 export type TUserRoles = 'admin' | 'user';
 
@@ -83,7 +84,14 @@ export class AuthenticationService {
 
   public static loginWithWebAuthN() {}
 
-  public static logout() {}
+  /**
+   * Logout the current user by clearing the tokens and returning to the login page
+   */
+  public static logout(redirect: string = '') {
+    this.$user.next(null);
+    HTTPService.get(`${this.baseUrl}/logout`).toPromise();
+    Router.navigate(`/login${ redirect ? `?redirect=${redirect}` : ''}`);
+  }
 
   private static baseUrl = '/api/auth'
 
