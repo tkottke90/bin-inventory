@@ -1,0 +1,28 @@
+.container {
+  display: grid;
+  grid-template-columns: 5rem 1fr;
+  grid-template-rows: 1fr 1fr;
+}
+
+.container > svg {
+  grid-column: 1;
+  grid-row: 1 / 3;
+
+  width: 5rem;
+  margin: auto;
+
+}
+
+.container > p {
+  font-size: 1.5rem;
+}
+
+.container > .bin {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.container > .inventory {
+  grid-column: 2;
+  grid-row: 2;
+}
