@@ -19,6 +19,7 @@ export default class AuthRoute extends BaseRoute {
 
     const routes: IRoute[] = [
       { method: 'post', path: '/login', action: app.authentication.basicAuth },
+      { method: 'post', path: '/logout', action: this.logout },
       { method: 'get', path: '/get-user', action: this.getIDToken, beforeHooks: [ app.authentication.jwtAuth ] },
       { method: 'get', path: '/forgot', action: this.forgotPassword }
     ]
@@ -283,6 +284,20 @@ export default class AuthRoute extends BaseRoute {
 
       resolve({ result: true })
     })
+  }
+
+  private logout = (context: IContext) => {
+    return new Promise(async (resolve, reject) => {
+      const noCookieOptions = {
+        path: '/',
+        maxAge: 0
+      };
+
+      context.response.cookie('session-access', '', noCookieOptions);
+      context.response.cookie('session-refresh', '', noCookieOptions);
+
+      resolve({ _code: 204 });
+    });
   }
 }
 
