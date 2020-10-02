@@ -7,6 +7,17 @@ import { BaseComponent } from './components/base-component';
 
 import './util/router-outlet';
 
+// == Shared Components ==
+import './components/app-shell';
+import '@material/mwc-top-app-bar-fixed';
+import '@material/mwc-button';
+import '@material/mwc-drawer';
+import '@material/mwc-icon';
+import '@material/mwc-icon-button';
+import '@material/mwc-textfield';
+import '@material/mwc-snackbar';
+// =======================
+
 const pages = getRoutes(routes)
 
 class AppComponent extends BaseComponent {
