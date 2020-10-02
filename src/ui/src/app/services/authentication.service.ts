@@ -74,7 +74,7 @@ export class AuthenticationService {
       throw new Error(response.statusText);
     }
 
-    const { idToken } = await response.json();
+    const { id: idToken } = await response.json();
 
     UserService.$user.next(
       this.parseJWT(idToken)
