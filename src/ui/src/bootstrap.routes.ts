@@ -2,6 +2,14 @@ import { Route } from './app/util/route';
 
 const routes: Route[] = [
   new Route({
+    icon: 'login',
+    label: 'Login',
+    path: '/login',
+    promise: () => import('./app/pages/login/login'),
+    render: true,
+    tag: 'login-page'
+  }),
+  new Route({
     icon: 'home',
     label: 'Home',
     path: '/',
