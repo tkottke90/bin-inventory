@@ -25,6 +25,8 @@ class AppShellComponent extends LitElement {
     const documentSizing = document.body.getBoundingClientRect();
     const isDesktop  = documentSizing.width > 600; // Media Query on 600px
     
+    const user = AuthenticationService.$user.value;
+
     return html`
       <style>
         :host {
@@ -93,11 +95,7 @@ class AppShellComponent extends LitElement {
       </style>
       <mwc-drawer hasHeader type="modal" ?open=${this.showDrawer} @MDCDrawer:closed=${this.closeDrawer}>
         <div slot="title" class="drawerTitle">
-          <div class="userDetails">
-            <h3 class="avatar">T</h3>
-            <h5 class="name">Thomas Kottke</h5>
-            <h6 class="email">t.kottke90@gmail.com</h6>
-          </div>
+          ${this.renderUserDetails()}
           <div class="userActions">
             <mwc-button class="drawerBtns" label="Account"></mwc-button>
             <mwc-icon-button icon="login"></mwc-icon-button>
@@ -137,6 +135,25 @@ class AppShellComponent extends LitElement {
 
   private renderDrawerButtons() {
     return html``;
+  }
+
+  private renderUserDetails() {
+
+    const user = AuthenticationService.$user.value;
+
+    if (!user) {
+      return html``;
+    }
+
+    const _userDetails = user as IUser;
+
+    return html`
+      <div class="userDetails">
+        <h3 class="avatar">${_userDetails.firstName.slice(0, 1).toUpperCase()}</h3>
+        <h5 text-ellipsis class="name">${_userDetails.firstName} ${_userDetails.lastName}</h5>
+        <h6 text-ellipsis class="email">${_userDetails.email}</h6>
+      </div>
+    `;
   }
 
   private logout() {
