@@ -16,6 +16,13 @@ const routes: Route[] = [
     promise: () => import('./app/pages/home/home'),
     render: true,
     tag: 'home-page'
+  }),
+  new Route({
+    label: '404',
+    path: '*',
+    promise: () => import('./app/pages/404/not-found'),
+    render: true,
+    tag: 'not-found-component'
   })
 ];
 
