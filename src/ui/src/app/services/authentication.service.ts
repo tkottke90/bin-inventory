@@ -1,22 +1,10 @@
 import { BehaviorSubject } from 'rxjs';
 import { HTTPService } from './http.service';
 import { AnalyticsService } from './analytics.service';
-import { UserService } from './user.service';
+import { IUser, UserService } from './user.service';
 import { Router } from '../router';
 
 export type TUserRoles = 'admin' | 'user';
-
-export interface IUser {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  active: boolean;
-  settings: any;
-  auth?: any;
-  createdAt: string;
-  updatedAt: string;
-}
 
 export interface IUserTokens {
   access: string;
@@ -25,7 +13,7 @@ export interface IUserTokens {
 
 export class AuthenticationService {
 
-  public static $user: BehaviorSubject<IUser | null> = new BehaviorSubject<IUser | null>(null);
+  public static $user: BehaviorSubject<IUser | false> = new BehaviorSubject<IUser | false>(false);
 
   public static async init() {
     const returnToLogin = () => {
@@ -50,12 +38,14 @@ export class AuthenticationService {
 
     const user = this.parseJWT(result.id);
     
-    if(!user) {
+    if(!user && !window.location.pathname.startsWith('/login')) {
       const details = { method: 'parseJWT', token: result.id };  
       AnalyticsService.writeLog({ level: 'verbose', message: 'Unable to parse ID token', meta: details });
       AnalyticsService.appendUserStory({ description: 'Application Init - User attempted to access route and token get failed', meta: details })
       return returnToLogin();
     }
+
+    this.$user.next(user);
   }
 
   public static getUser() {
@@ -88,7 +78,7 @@ export class AuthenticationService {
    * Logout the current user by clearing the tokens and returning to the login page
    */
   public static logout(redirect: string = '') {
-    this.$user.next(null);
+    this.$user.next(false);
     HTTPService.get(`${this.baseUrl}/logout`).toPromise();
     Router.navigate(`/login${ redirect ? `?redirect=${redirect}` : ''}`);
   }
