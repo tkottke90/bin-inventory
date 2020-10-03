@@ -38,9 +38,16 @@ export default class AuthRoute extends BaseRoute {
 
   private getIDToken = (context: IContext) => {
     return new Promise(async (resolve, reject) => {
+      const Users = context.app.services['/users'] as UsersRoute;
+      const params = Object.assign(context.params, { id: context.user.sub });
+      const user: User = (await Users.getById(Object.assign(context, { params }))) as User;
+
+      delete user.password;
+      delete user.auth;
+
       resolve({
         access: context.request.cookies['session-access'],
-        id: await context.app.authentication.createTokenFromObject(context.user)
+        id: await context.app.authentication.createTokenFromObject(user.toJSON())
       });
     });
   }
