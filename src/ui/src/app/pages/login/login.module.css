@@ -33,6 +33,22 @@
   justify-content: flex-end;
 }
 
+.loggedIn > h3 {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.loggedIn > .actions {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+}
+
+.loggedIn > .actions > mwc-button {
+  margin: 1rem auto;
+}
+
 @media (min-width: 600px) {
   .card {
     max-width: 18rem;

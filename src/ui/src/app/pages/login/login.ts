@@ -7,6 +7,7 @@ import { SnackbarHelper } from '../../util/snackbar-helper.util';
 // == Types ==
 import { PageComponent } from '../../components/page-component';
 import { TextField } from '@material/mwc-textfield';
+import { IUser } from '../../services/user.service';
 // ===========
 
 // == Services ==
@@ -23,6 +24,7 @@ const tag = 'login-page';
 class LoginPage extends PageComponent {
 
   private disableInputs: boolean = false;
+  private user$: IUser | false = false;
 
   firstUpdated() {
     const form = this.querySelector('form') as HTMLFormElement;
@@ -39,7 +41,19 @@ class LoginPage extends PageComponent {
     });
   }
 
+  onActivated() {
+    this.user$ = AuthenticationService.$user.value;
+    
+    console.dir(this.user$);
+    this.requestUpdate();
+  }
+
   render() {
+    if (this.user$) {
+      return html`${this.renderLoggedIn()}`
+      return;
+    }
+
     return html`
       <main class="${styles.content}">
         <div class="${styles.card}">
@@ -70,6 +84,28 @@ class LoginPage extends PageComponent {
       </main>
       <mwc-snackbar></mwc-snackbar>
     `
+  }
+
+  private renderLoggedIn() {
+    console.dir(this.user$);
+    console.log('Render Logged In');
+
+    const email = (this.user$ as IUser).firstName;
+
+    return html`
+      <main class="${styles.content}">
+        <div class="${styles.card} ${styles.loggedIn}">
+          <logo-component></logo-component>
+      
+          <h3>Already logged in:</h3>
+          <div class="${styles.actions}">
+            <mwc-button label="Continue as ${email}" raised @click=${this.navigate('/')}></mwc-button>
+
+            <mwc-button label="Not ${email}? Sign Out" outlined @click=${this.logout}></mwc-button>
+          </div>
+        </div>
+      </main>
+    `;
   }
 
   private async login() {
@@ -171,6 +207,16 @@ class LoginPage extends PageComponent {
     }
 
     Router.navigate('/');
+  }
+
+  private logout() {
+    AuthenticationService.logout();
+  }
+
+  private navigate(path: string) {
+    return () => {
+      Router.navigate(path);
+    }
   }
 }
 
