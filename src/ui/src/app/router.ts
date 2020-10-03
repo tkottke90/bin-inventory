@@ -59,7 +59,7 @@ export class Router {
       }
 
       route.promise()
-        .then((response) => this.invokeSuccess(response, route, ctx, next))
+        .then(async (response) => await this.invokeSuccess(response, route, ctx, next))
         .catch((error) => this.invokeError(error, route, ctx, next))
         .finally(() => this.invokeFinally(route, ctx, next));
     };
@@ -70,7 +70,7 @@ export class Router {
     this.before(route, ctx, next);
   }
 
-  private static invokeSuccess(response: any, route: Route, ctx: PageJS.Context, next: () => void) {
+  private static async invokeSuccess(response: any, route: Route, ctx: PageJS.Context, next: () => void) {
     route.loaded = true;
     const prevPage = document.querySelector('.page.active') as HTMLElement;
     const nextPage = document.querySelector(response.tag) as PageComponent;
@@ -79,7 +79,7 @@ export class Router {
       prevPage.classList.remove('active');
     }
     nextPage.classList.add('active');
-    nextPage.onActivated();
+    await nextPage.onActivated();
 
     window.scrollTo({
       behavior: 'smooth',
