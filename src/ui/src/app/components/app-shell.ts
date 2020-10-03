@@ -105,7 +105,7 @@ class AppShellComponent extends LitElement {
         </div>
         <div slot="appContent">
           <mwc-top-app-bar-fixed>
-            ${ isDesktop ? html`<mwc-icon-button slot="navigationIcon" icon="menu" class="appHeaderMenuBtn" @click=${this.toggleDrawer}></mwc-icon-button>` : '' }
+            <mwc-icon-button slot="navigationIcon" icon="menu" class="appHeaderMenuBtn" @click=${this.toggleDrawer}></mwc-icon-button>
             <div slot="title">Bin Inventory</div>
             <slot></slot>
             
