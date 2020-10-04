@@ -17,7 +17,9 @@ export class AuthenticationService {
 
   public static async init() {
     const returnToLogin = () => {
-      window.history.replaceState({}, '', `/login?redirect=${window.location.pathname}`);
+      const redirect = window.location.pathname.startsWith('/login') ? '' : `?redirect=${window.location.pathname}`;
+
+      window.history.replaceState({}, '', `/login${redirect}`);
     }
     
     // Call server and get current user if cookies exist
@@ -37,12 +39,13 @@ export class AuthenticationService {
     }
 
     const user = this.parseJWT(result.id);
-    
-    if(!user && !window.location.pathname.startsWith('/login')) {
+
+    if (!user) {
       const details = { method: 'parseJWT', token: result.id };  
       AnalyticsService.writeLog({ level: 'verbose', message: 'Unable to parse ID token', meta: details });
-      AnalyticsService.appendUserStory({ description: 'Application Init - User attempted to access route and token get failed', meta: details })
-      return returnToLogin();
+      AnalyticsService.appendUserStory({ description: 'Application Init - User attempted to access route and token get failed', meta: details });
+      window.history.replaceState({}, '', `/login`);
+      return;
     }
 
     this.$user.next(user);
@@ -67,7 +70,7 @@ export class AuthenticationService {
 
     const { id: idToken } = await response.json();
 
-    UserService.$user.next(
+    this.$user.next(
       this.parseJWT(idToken)
     );
   }
