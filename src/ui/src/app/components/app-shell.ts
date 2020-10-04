@@ -98,7 +98,7 @@ class AppShellComponent extends LitElement {
           ${this.renderUserDetails()}
           <div class="userActions">
             <mwc-button class="drawerBtns" label="Account"></mwc-button>
-            <mwc-icon-button icon="login"></mwc-icon-button>
+            <mwc-icon-button icon="login" @click=${this.logout}></mwc-icon-button>
           </div>
         </div>
         <div slot="appContent">
