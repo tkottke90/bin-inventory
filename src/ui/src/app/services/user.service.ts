@@ -1,4 +1,3 @@
-import { BehaviorSubject } from 'rxjs';
 import { HTTPService } from './http.service';
 
 export interface IUser {
@@ -16,12 +15,6 @@ export interface IUser {
 }
 
 export class UserService {
-  
-  public static $user: BehaviorSubject<IUser | false> = new BehaviorSubject<IUser | false>(false);
-
-  public static $getCurrentUser(): IUser | false {
-    return this.$user.value;
-  }
 
   public static find(query: string) {
 
