@@ -79,7 +79,7 @@ export class AuthenticationService {
    */
   public static logout(redirect: string = '') {
     this.$user.next(false);
-    HTTPService.get(`${this.baseUrl}/logout`).toPromise();
+    HTTPService.post(`${this.baseUrl}/logout`, {}).toPromise();
     Router.navigate(`/login${ redirect ? `?redirect=${redirect}` : ''}`);
   }
 
