@@ -108,13 +108,12 @@ export default class AuthenticationService {
             const db = context.app.database.model('User');
             const userId = context.request.cookies['session-refresh'].split('.')[0]; // Id is listed as first part of token
 
-            const result = await db.findOne({ where: { [db.primaryKeyAttribute]: userId } })
+            const result =await db.findOne({ where: { [db.primaryKeyAttribute]: userId } })
             const _user: any = await result.get({ plain: true });
             const auth = _user.auth || {};
             // Compare refresh token provided with the one for that user
             if (auth.refresh === context.request.cookies['session-refresh']) {
               user = _user;
-              delete user.auth.refresh;
               user.sub = user.id;
               this.generateTokens(_user, context, true);
             }
