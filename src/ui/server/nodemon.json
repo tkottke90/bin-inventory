@@ -1,4 +1,5 @@
 {
+  "watch": ["./server"],
   "ignore": [
     "logs/*",
     "node_modules/**/node_modules"
