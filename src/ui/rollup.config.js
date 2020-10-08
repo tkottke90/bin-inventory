@@ -60,9 +60,40 @@ const service_worker = {
         'index.html',
         'favicon.ico'
       ],
+      additionalManifestEntries: [
+        'https://fonts.googleapis.com/css?family=Comfortaa',
+        'https://fonts.googleapis.com/css?family=Material+Icons&display=block'
+      ]
     }),
     terser(),
   ]
 }
 
-export default [ main, service_worker ];
+const non_service_worker = {
+  input: 'src/app/util/service-worker.js',
+  output: {
+    dir: 'dist/',
+    format: 'esm',
+    sourcemap: false
+  },
+  plugins: [
+    replace({
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
+    }),
+    nodeResolve({
+      browser: true,
+    }),
+    terser(),
+  ]
+}
+
+export default commandLineArgs => {
+  const output = [ main ];
+  if (commandLineArgs.configSW === true) {
+    output.push(service_worker);
+  } else {
+    output.push(non_service_worker);
+  }
+
+  return output;
+}
