@@ -15,17 +15,17 @@ const tag = 'app-shell';
 class AppShellComponent extends LitElement {
 
   private showDrawer: boolean = false;
-  private user$: IUser | false = false;
 
   @property({ type: String })
   title: string = '';
 
+  @property({ type: Boolean })
+  disableMenu: boolean = false;
+
   render() {
     // Get Document size
-    const documentSizing = document.body.getBoundingClientRect();
-    const isDesktop  = documentSizing.width > 600; // Media Query on 600px
-    
-    const user = AuthenticationService.$user.value;
+    // const documentSizing = document.body.getBoundingClientRect();
+    // const isDesktop  = documentSizing.width > 600; // Media Query on 600px
 
     return html`
       <style>
@@ -103,7 +103,7 @@ class AppShellComponent extends LitElement {
         </div>
         <div slot="appContent">
           <mwc-top-app-bar-fixed>
-            <mwc-icon-button slot="navigationIcon" icon="menu" class="appHeaderMenuBtn" @click=${this.toggleDrawer}></mwc-icon-button>
+            ${ this.disableMenu ? '' : html`<mwc-icon-button slot="navigationIcon" icon="menu" class="appHeaderMenuBtn" @click=${this.toggleDrawer}></mwc-icon-button>` }
             <div slot="title">Bin Inventory</div>
             <slot></slot>
             
