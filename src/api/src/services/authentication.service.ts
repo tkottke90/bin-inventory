@@ -115,6 +115,7 @@ export default class AuthenticationService {
             if (auth.refresh === context.request.cookies['session-refresh']) {
               user = _user;
               delete user.auth.refresh;
+              user.sub = user.id;
               this.generateTokens(_user, context, true);
             }
           }
