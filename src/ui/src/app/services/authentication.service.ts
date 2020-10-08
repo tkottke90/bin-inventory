@@ -7,7 +7,7 @@ import { Router } from '../router';
 export type TUserRoles = 'admin' | 'user';
 
 export interface IUserTokens {
-  access: string;
+  access?: string;
   id: string;
 }
 
@@ -34,7 +34,7 @@ export class AuthenticationService {
     
     const result: IUserTokens = await response.json();
 
-    if (!result.access || !result.id) {
+    if (!result.id) {
       returnToLogin();
     }
 
