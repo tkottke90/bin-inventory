@@ -60,6 +60,34 @@
   justify-content: flex-end;
 }
 
+.modalChecklist {
+  margin-top: 1rem;
+}
+
+.modalChecklist > li {
+  margin: 0.75rem auto;
+}
+
+.resultChip {
+  padding: 0.25rem 0.5rem;
+  border-radius: 1rem;
+}
+
+.resultChip[color="red"] {
+  background-color: red;
+  color: #fff;
+}
+
+.resultChip[color="green"] {
+  background-color: green;
+  color: #fff;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
 @media (max-width: 600px) {
   .noUser > h3 {
     font-size: 5.5rem;

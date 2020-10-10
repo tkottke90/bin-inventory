@@ -1,4 +1,5 @@
 import { html } from 'lit-html';
+import { query } from 'lit-element';
 import styles from './home.module.css'
 
 // == Types ==
@@ -10,12 +11,20 @@ import { IUser } from '../../services/user.service';
 import { AuthenticationService } from '../../services/authentication.service';
 // =============
 
+// == Components == 
+import '../../components/dialog/dialog';
+// ================
+
 const tag = 'home-page';
 
 class HomePage extends PageComponent {
 
   private user$: IUser | false = false;
   private disableScan: boolean = false;
+  private hasVideo = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+
+  @query('dialog-component')
+  private dialog!: any;
 
   firstUpdated() {
     AuthenticationService.$user.subscribe((user) => {
@@ -23,6 +32,7 @@ class HomePage extends PageComponent {
       this.requestUpdate();
     })
 
+    // Check if user has provied access to the camera
     navigator
       .permissions
       .query({ name: 'camera' })
@@ -79,8 +89,39 @@ class HomePage extends PageComponent {
             </div>
           </div>
         </main>
+        <dialog-component>
+          <h3>Scanning Unavailable</h3>
+          <p>The scan function requires that your device have a camera AND that you allow this website to access your camera.  Since one of those conditions is not met, the scan feature is unavailable.</p>
+          <ul class="${styles.modalChecklist}">
+            <li>User Permission: 
+              ${this.renderChip(!this.disableScan)}
+            </li>
+            <li>Camera Detected: 
+              ${this.renderChip(this.hasVideo)}
+            </li>
+          </ul>
+
+          <div class="${styles.modalActions}">
+            <mwc-button outline close label="close"></mwc-button>
+            <mwc-button raised label="update" ?disabled=${!this.hasVideo}></mwc-button>
+          </div>
+        </dialog-component>
       </app-shell>
     `
+  }
+
+  private renderChip(state: boolean) {
+    return html`
+      <strong 
+        class=${styles.resultChip} 
+        color="${state ? 'green' : 'red'}">
+        ${state ? 'Yes' : 'No'}
+      </strong>
+    `
+  }
+
+  private openDialog() {
+    this.dialog.open = true;
   }
 }
 
