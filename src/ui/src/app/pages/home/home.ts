@@ -60,7 +60,7 @@ class HomePage extends PageComponent {
           <div class="card ${styles.getStarted}">
             <h4>Welcome Back!</h4>  
             ${ this.disableScan ? 
-              html`<mwc-button warn raised label="Unavailable" trailingIcon icon="error"></mwc-button>` :
+              html`<mwc-button warn raised label="Unavailable" trailingIcon icon="error" @click=${this.openDialog}></mwc-button>` :
               html`<mwc-button raised label="Find My Stuff" trailingIcon icon="qr_code_scanner"></mwc-button>`
             }
           </div>
