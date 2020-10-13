@@ -88,6 +88,10 @@
   justify-content: flex-end;
 }
 
+.modalActions > mwc-button{
+  margin: 0 1rem;
+}
+
 @media (max-width: 600px) {
   .noUser > h3 {
     font-size: 5.5rem;
