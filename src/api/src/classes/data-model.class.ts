@@ -4,6 +4,7 @@ import Application from './application.class';
 
 import { IQuery, QueryClass } from './query.class';
 import { IContext, IModelHooks } from '@interfaces/routing.interfaces';
+import { reject, resolve } from 'bluebird';
 
 interface IConfigurationOptions {
   exclusions?: string[];
@@ -56,12 +57,37 @@ export default class DataModelRoute extends BaseRoute {
       routes: [
         { method: 'get', path: '/', action: this.get, beforeHooks: [ ...beforeHooks.all, ...beforeHooks.find ], afterHooks: [ ...afterHooks.all, ...afterHooks.find ], errorHooks: [ ...errorHooks.all, ...errorHooks.find ]},
         { method: 'get', path: '/:id', action: this.getById, beforeHooks: [ ...beforeHooks.all, ...beforeHooks.get ], afterHooks: [ ...afterHooks.all, ...afterHooks.get ], errorHooks: [ ...errorHooks.all, ...errorHooks.get ]},
+        { method: 'get', path: '/count', action: this.count, beforeHooks: [ ...beforeHooks.all, ...beforeHooks.get ], afterHooks: [ ...afterHooks.all, ...afterHooks.get ], errorHooks: [ ...errorHooks.all, ...errorHooks.get ]},
         { method: 'post', path: '/', action: this.post, beforeHooks: [ ...beforeHooks.all, ...beforeHooks.create ], afterHooks: [ ...afterHooks.all, ...afterHooks.create ], errorHooks: [ ...errorHooks.all, ...errorHooks.create ]},
         { method: 'patch', path: '/:id', action: this.patch, beforeHooks: [ ...beforeHooks.all, ...beforeHooks.update ], afterHooks: [ ...afterHooks.all, ...afterHooks.update ], errorHooks: [ ...errorHooks.all, ...errorHooks.update ]},
         { method: 'put', path: '/:id', action: this.put, beforeHooks: [ ...beforeHooks.all, ...beforeHooks.updateOrCreate ], afterHooks: [ ...afterHooks.all, ...afterHooks.updateOrCreate ], errorHooks: [ ...errorHooks.all, ...errorHooks.updateOrCreate ]},
         { method: 'delete', path: '/:id', action: this.delete, beforeHooks: [ ...beforeHooks.all, ...beforeHooks.delete ], afterHooks: [ ...afterHooks.all, ...afterHooks.delete ], errorHooks: [ ...errorHooks.all, ...errorHooks.delete ]},
       ],
       paginate: true
+    });
+  }
+
+  // Get record count
+  public count = (context: IContext) => {
+    return new Promise(async (resolve, reject) => {
+      const query: QueryClass = new QueryClass(context.query);
+      let result: any;
+
+      const queryObj = query.toSequelizeQuery();
+      queryObj.attributes = { exclude: this.exclusions };
+
+      try {
+        result = await this.model.count({
+          ...queryObj,
+          subQuery: false
+        });
+      } catch (err) {
+        this.app.logger.error(err, (message) => `Sequelize Error during update in GET Count Request: ${message}`);
+        reject({ _code: 500, message: 'Internal Server Error: Error Getting Users'});
+        return;
+      }
+
+      resolve(generateResponse(query.paginate, result, query.limit, query.skip, await this.model.count()));
     });
   }
 
