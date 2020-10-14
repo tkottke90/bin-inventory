@@ -22,11 +22,6 @@ class NotFoundComponent extends PageComponent {
     `;
   }
 
-  private navigate(url: string) {
-    return async () => {
-      Router.navigate(url);
-    };
-  }
 }
 
 customElements.define(tag, NotFoundComponent);

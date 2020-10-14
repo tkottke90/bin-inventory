@@ -212,12 +212,6 @@ class LoginPage extends PageComponent {
   private logout() {
     AuthenticationService.logout();
   }
-
-  private navigate(path: string) {
-    return () => {
-      Router.navigate(path);
-    }
-  }
 }
 
 customElements.define(tag, LoginPage);

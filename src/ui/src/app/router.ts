@@ -79,7 +79,7 @@ export class Router {
       prevPage.classList.remove('active');
     }
     nextPage.classList.add('active');
-    await nextPage.onActivated();
+    await nextPage.onActivated(response, route, ctx, next);
 
     window.scrollTo({
       behavior: 'smooth',
