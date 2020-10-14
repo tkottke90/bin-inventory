@@ -24,24 +24,22 @@ export class AuthenticationService {
     
     // Call server and get current user if cookies exist
     const response = await this.getUser().toPromise();
-    if (!response.ok) {
+    if (response.error) {
       const details = { url: `${this.baseUrl}/get-user`, response: response.status, responseMessage: response.statusText }
       AnalyticsService.writeLog({ level: 'verbose', message: 'User access token attempt failed', meta: details});
       AnalyticsService.appendUserStory({ description: 'Application Init - User attempted to access route and token get failed', meta: details })
       returnToLogin();
       return;
     }
-    
-    const result: IUserTokens = await response.json();
 
-    if (!result.id) {
+    if (!response.id) {
       returnToLogin();
     }
 
-    const user = this.parseJWT(result.id);
+    const user = this.parseJWT(response.id);
 
     if (!user) {
-      const details = { method: 'parseJWT', token: result.id };  
+      const details = { method: 'parseJWT', token: response.id };  
       AnalyticsService.writeLog({ level: 'verbose', message: 'Unable to parse ID token', meta: details });
       AnalyticsService.appendUserStory({ description: 'Application Init - User attempted to access route and token get failed', meta: details });
       window.history.replaceState({}, '', `/login`);
@@ -64,11 +62,11 @@ export class AuthenticationService {
 
     const response = await HTTPService.post(`${this.baseUrl}/login`, {}, headers).toPromise();
 
-    if (!response.ok) {
+    if (response.error) {
       throw new Error(response.statusText);
     }
 
-    const { id: idToken } = await response.json();
+    const { id: idToken } = response;
 
     this.$user.next(
       this.parseJWT(idToken)
