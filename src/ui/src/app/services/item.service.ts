@@ -2,6 +2,10 @@ import { HTTPService } from './http.service';
 
 
 export class ItemService {
+  public static count() {
+    return HTTPService.get(`${this.baseUrl}/count`);
+  }
+  
   public static find() {}
 
   public static get(id: string) {}
@@ -14,5 +18,5 @@ export class ItemService {
 
   public static delete() {}
 
-  private baseUrl = '/api/items'
+  private static baseUrl = '/api/items'
 }

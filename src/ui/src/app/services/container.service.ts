@@ -2,6 +2,10 @@ import { HTTPService } from './http.service';
 
 
 export class ContainerServuce {
+  public static count() {
+    return HTTPService.get(`${this.baseUrl}/count`);
+  }
+
   public static find() {}
 
   public static get(id: string) {}
@@ -14,5 +18,5 @@ export class ContainerServuce {
 
   public static delete() {}
 
-  private baseUrl = '/api/containers'
+  private static baseUrl = '/api/containers'
 }
