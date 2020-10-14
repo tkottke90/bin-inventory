@@ -83,6 +83,10 @@
   color: #fff;
 }
 
+p.modalBody {
+  margin: 0.5rem 0;
+}
+
 .modalActions {
   display: flex;
   justify-content: flex-end;

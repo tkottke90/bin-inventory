@@ -114,8 +114,8 @@ class HomePage extends PageComponent {
         </main>
         <dialog-component>
           <h3>Scanning Unavailable</h3>
-          <p>The scan function requires that your device have a camera AND that you allow this website to access your camera.  Since one of those conditions is not met, the scan feature is unavailable.</p>
-          <p>To enable this feature, go into your settings for this website and allow it to use your camera.</p>
+          <p class="${styles.modalBody}">The scan function requires that your device have a camera AND that you allow this website to access your camera.  Since one of those conditions is not met, the scan feature is unavailable.</p>
+          <p class="${styles.modalBody}">To enable this feature, go into your settings for this website and allow it to use your camera.</p>
           <ul class="${styles.modalChecklist}">
             <li>User Permission: 
               ${this.renderChip(!this.disableScan)}
