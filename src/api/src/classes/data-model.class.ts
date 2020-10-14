@@ -56,8 +56,8 @@ export default class DataModelRoute extends BaseRoute {
     this.setup({
       routes: [
         { method: 'get', path: '/', action: this.get, beforeHooks: [ ...beforeHooks.all, ...beforeHooks.find ], afterHooks: [ ...afterHooks.all, ...afterHooks.find ], errorHooks: [ ...errorHooks.all, ...errorHooks.find ]},
-        { method: 'get', path: '/:id', action: this.getById, beforeHooks: [ ...beforeHooks.all, ...beforeHooks.get ], afterHooks: [ ...afterHooks.all, ...afterHooks.get ], errorHooks: [ ...errorHooks.all, ...errorHooks.get ]},
         { method: 'get', path: '/count', action: this.count, beforeHooks: [ ...beforeHooks.all, ...beforeHooks.get ], afterHooks: [ ...afterHooks.all, ...afterHooks.get ], errorHooks: [ ...errorHooks.all, ...errorHooks.get ]},
+        { method: 'get', path: '/:id', action: this.getById, beforeHooks: [ ...beforeHooks.all, ...beforeHooks.get ], afterHooks: [ ...afterHooks.all, ...afterHooks.get ], errorHooks: [ ...errorHooks.all, ...errorHooks.get ]},
         { method: 'post', path: '/', action: this.post, beforeHooks: [ ...beforeHooks.all, ...beforeHooks.create ], afterHooks: [ ...afterHooks.all, ...afterHooks.create ], errorHooks: [ ...errorHooks.all, ...errorHooks.create ]},
         { method: 'patch', path: '/:id', action: this.patch, beforeHooks: [ ...beforeHooks.all, ...beforeHooks.update ], afterHooks: [ ...afterHooks.all, ...afterHooks.update ], errorHooks: [ ...errorHooks.all, ...errorHooks.update ]},
         { method: 'put', path: '/:id', action: this.put, beforeHooks: [ ...beforeHooks.all, ...beforeHooks.updateOrCreate ], afterHooks: [ ...afterHooks.all, ...afterHooks.updateOrCreate ], errorHooks: [ ...errorHooks.all, ...errorHooks.updateOrCreate ]},
@@ -78,8 +78,7 @@ export default class DataModelRoute extends BaseRoute {
 
       try {
         result = await this.model.count({
-          ...queryObj,
-          subQuery: false
+          ...queryObj
         });
       } catch (err) {
         this.app.logger.error(err, (message) => `Sequelize Error during update in GET Count Request: ${message}`);
@@ -87,7 +86,7 @@ export default class DataModelRoute extends BaseRoute {
         return;
       }
 
-      resolve(generateResponse(query.paginate, result, query.limit, query.skip, await this.model.count()));
+      resolve({result});
     });
   }
 
