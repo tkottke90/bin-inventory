@@ -71,21 +71,21 @@ class HomePage extends PageComponent {
             <h4>Welcome Back!</h4>  
             ${ this.disableScan ? 
               html`<mwc-button warn raised label="Unavailable" trailingIcon icon="error" @click=${this.openDialog}></mwc-button>` :
-              html`<mwc-button raised label="Find My Stuff" trailingIcon icon="qr_code_scanner"></mwc-button>`
+              html`<mwc-button raised label="Find My Stuff" trailingIcon icon="qr_code_scanner" @click=${this.navigate('/scan')}></mwc-button>`
             }
           </div>
           <div class="card ${styles.itemDetails}">
             <h5>Items</h5>
             <p class="${styles.itemCount}">Total: ${0}</p>
             <div class="${styles.actions}">
-              <mwc-button label="View" raised></mwc-button>
+              <mwc-button label="View" raised @click=${this.navigate('/containers')}></mwc-button>
             </div>
           </div>
           <div class="card ${styles.containerDetails}">
             <h5>Containers</h5>
             <p class="${styles.itemCount}">Total: ${0}</p>
             <div class="${styles.actions}">
-              <mwc-button label="View" raised></mwc-button>
+              <mwc-button label="View" raised @click=${this.navigate('/items')}></mwc-button>
             </div>
           </div>
         </main>
