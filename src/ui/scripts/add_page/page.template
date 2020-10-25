@@ -1,0 +1,26 @@
+import { html } from 'lit-html';
+import '${FILENAME}.module.css';
+${RXJSs}
+
+// == Types ==
+import { PageComponent } from '../../components/page-component';
+// ===========
+
+// == Services ==
+
+// ==============
+
+// == Components ==
+
+// ================
+
+const tag = '${TAG}';
+
+class ${CLASS} extends PageComponent {
+
+  render() {
+    return html`
+      <h3>${CLASS} works!</h3>
+    `
+  }
+}

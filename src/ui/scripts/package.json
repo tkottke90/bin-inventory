@@ -1,0 +1,23 @@
+{
+  "name": "bin-inventory-scripts",
+  "version": "1.0.0",
+  "description": "Collection of scripts used with the ui directory",
+  "main": " ",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "NodeJS",
+    "CLI",
+    "CommanderJS",
+    "InquirerJS"
+  ],
+  "author": "Thomas Kottke <t.kottke90@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^6.1.0",
+    "figlet": "^1.5.0",
+    "inquirer": "^7.3.3",
+    "inquirer-select-directory": "^1.2.0"
+  }
+}
