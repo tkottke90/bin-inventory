@@ -18,6 +18,14 @@ const routes: Route[] = [
     tag: 'home-page'
   }),
   new Route({
+    icon: 'qr_code_scanner',
+    label: 'Scanner',
+    path: '/scan',
+    promise: () => import('./app/pages/scan/scanner'),
+    render: true,
+    tag: 'scanner-page'
+  }),
+  new Route({
     label: '404',
     path: '*',
     promise: () => import('./app/pages/404/not-found'),
