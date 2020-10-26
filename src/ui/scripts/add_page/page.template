@@ -24,3 +24,10 @@ class ${CLASS} extends PageComponent {
     `
   }
 }
+
+customElements.define(tag, ${CLASS});
+
+export {
+  ${CLASS},
+  tag
+};
