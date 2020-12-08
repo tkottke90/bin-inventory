@@ -1,13 +1,14 @@
 import { html } from 'lit-html';
 import { query } from 'lit-element'
 import styles from './scanner.module.css';
+import { wrap } from 'comlink';
 
 // == Types ==
 import { PageComponent } from '../../components/page-component';
 // ===========
 
 // == Services ==
-
+import { WorkerService } from '../../services/worker.service';
 // ==============
 
 // == Components ==
@@ -34,6 +35,26 @@ class ScannerPage extends PageComponent {
   private videoLoop: number = 0;
   private videoStream!: MediaStream;
 
+  private worker: any;
+
+  firstUpdated() {
+    const worker = new Worker('/assets/scanner.worker.js');
+    this.worker = wrap(worker);
+
+  //   console.log('Calling ping');
+  //   const call = api.logSomething()
+   
+  //   console.dir(call);
+  //   call.then((response: any) => {
+  //     console.log('Response');
+  //     console.dir(response)
+  //   })
+  //   .catch((err: any) => console.error)
+  //   .finally(() => console.log('done'));
+
+    
+  }
+
   connectedCallback() {
     super.connectedCallback();
   }
@@ -48,7 +69,7 @@ class ScannerPage extends PageComponent {
         .then((videoStream) => {
           if (!videoStream) {
             console.error('Error in video stream')
-            console.dir(videoStream);
+            console.dir(videoStream); 
             return;
           }
 
@@ -84,19 +105,35 @@ class ScannerPage extends PageComponent {
     
       canvasContext.drawImage(video, 0, 0, canvas.width, canvas.height);
     
+      await this.scanImage();
+
       requestAnimationFrame(this.videoTick(canvas, video));
     }
   }
 
-  private async scanImage($event: Event) {
-    const canvas = document.createElement('canvas');
-    canvas.width = this.videoElement.videoWidth;
-    canvas.height = this.videoElement.videoHeight;
+  private async scanImage() {
+    // const canvas = this.canvasElement;
+    // canvas.width = this.videoElement.videoWidth;
+    // canvas.height = this.videoElement.videoHeight;
   
-    var ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+    var ctx = this.canvasElement.getContext('2d') as CanvasRenderingContext2D;
   
     ctx.drawImage(this.videoElement, 0, 0, this.videoElement.videoWidth, this.videoElement.videoHeight)
-    var dataURI = canvas.toDataURL('image/png');
+    var imageData = ctx.getImageData(0, 0, this.videoElement.width, this.videoElement.height);
+
+    const grayData = [];
+    const data = imageData.data;
+    for (let i = 0, j = 0; i < data.length; i += 4, j++) {
+      grayData[j] = (data[i] * 66 + data[i + 1] * 129 + data[i + 2]* 25 + 4096) >> 8;
+    }
+
+    const p = await this.worker.createImageBuffer(this.videoElement.width, this.videoElement.height);
+    await this.worker.HEAP8.set(grayData, p);
+
+    this.worker.scanImage(p, this.videoElement.width, this.videoElement.height);
+
+    this.worker.destroyImageBuffer(p);
+
   }
 }
 
