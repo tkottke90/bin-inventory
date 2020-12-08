@@ -12,6 +12,7 @@ class Environment {
     this.NODE_ENV = this.loadVariable('NODE_ENV');
     this.CWD = process.cwd();
     this.PORT = this.loadVariable('PORT');
+    this.HOST = this.loadOptionalVariable('HOST', '127.0.0.1');
     this.DIST_DIR = this.loadVariable('DIST_DIR');
 
     this.SERVER_URL = this.loadVariable('SERVER_URL')
@@ -61,12 +62,12 @@ class Environment {
     return value;
   }
 
-  loadOptionalVariable(name) {
+  loadOptionalVariable(name, defaultValue) {
     const value = process.env[name];
 
     if (!value) {
         console.log(`  ${name}: [optional variable not set]`);
-        return '';
+        return defaultValue;
     }
 
     console.log(`  ${name}: ${value}`);
