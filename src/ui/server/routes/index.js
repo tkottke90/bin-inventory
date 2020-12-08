@@ -5,10 +5,16 @@ const readDir = promisify(fs.readdir);
 
 const express = require('express');
 
+const contentTypeOverride = (req, res, next) => {
+  if (req.path.includes(`.wasm`)) {
+    res.set('Content-Type', 'application/wasm');
+  }
+  next();
+}
+
 module.exports = async (app) => {
 
-  app.use(express.static(path.resolve(__dirname, '..', app.env.DIST_DIR)));
-
+  app.use(express.static(path.resolve(__dirname, '..', app.env.DIST_DIR)), contentTypeOverride);
   
   // Automatic route file detection
   const dir = await readDir(path.resolve(__dirname));
