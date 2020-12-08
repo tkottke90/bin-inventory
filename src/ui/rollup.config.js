@@ -1,3 +1,5 @@
+import commonjs from '@rollup/plugin-commonjs';
+
 import nodeResolve from 'rollup-plugin-node-resolve';
 import typescript2 from 'rollup-plugin-typescript2';
 import postcss from 'rollup-plugin-postcss';
@@ -10,6 +12,7 @@ import workbox from 'rollup-plugin-workbox-inject';
 import inject from './build-util/inject';
 
 const main = {
+  context: 'window',
   input: ['src/bootstrap.ts'],
   output: {
     format: 'esm',
@@ -24,7 +27,8 @@ const main = {
         { src: 'src/app/404.html', dest: 'dist/' },
         { src: 'src/app/index.css', dest: 'dist/' },
         { src: 'src/app/favicon.ico', dest: 'dist/' },
-        { src: 'src/app/util/manifest.webmanifest', dest: 'dist/' }
+        { src: 'src/app/util/manifest.webmanifest', dest: 'dist/' },
+        { src: 'src/worker/scanner.worker.js', dest: 'dist/assets/' }
       ]
     }),
     nodeResolve(),
@@ -35,6 +39,29 @@ const main = {
     terser({ ecma: 8 }),
     image(),
     inject(),
+  ]
+}
+
+// { src: 'lib/zbar.wasm/output/zbar.js',    dest: 'dist/assets/' },
+// { src: 'lib/zbar.wasm/output/a.out.wasm', dest: 'dist/assets/' }
+
+const scanner_worker = {
+  context: 'window',
+  input: ['src/worker/scanner.worker.js'],
+  output: {
+    format: 'esm',
+    dir: 'dist/assets',
+    sourcemap: true
+  },
+  plugins: [
+    copy({
+      targets: [
+        { src: 'lib/zbar.wasm/output/zbar.js',    dest: 'dist/assets/' },
+        { src: 'lib/zbar.wasm/output/a.out.wasm', dest: 'dist/assets/' }
+      ]
+    }),
+    nodeResolve(),
+    terser({ ecma: 8 }),
   ]
 }
 
@@ -88,7 +115,7 @@ const non_service_worker = {
 }
 
 export default commandLineArgs => {
-  const output = [ main ];
+  const output = [ main, scanner_worker ];
   if (commandLineArgs.configSW === true) {
     output.push(service_worker);
   } else {
