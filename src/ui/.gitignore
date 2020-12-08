@@ -40,3 +40,6 @@ Thumbs.db
 
 # Ignore built ts files
 dist/**/*
+
+# Ignore external lib files
+lib/**/output/*
